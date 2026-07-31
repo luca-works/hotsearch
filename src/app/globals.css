@@ -1,0 +1,435 @@
+@import "tailwindcss";
+@custom-variant dark (&:is(.dark *));
+
+:root,
+.light {
+  color-scheme: light;
+  --scrollbar: rgba(148, 163, 184, 0.35);
+}
+
+.dark {
+  color-scheme: dark;
+  --scrollbar: rgba(148, 163, 184, 0.32);
+}
+
+@theme inline {
+  --font-sans: "PingFang SC", "SF Pro Text", "Helvetica Neue", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "SFMono-Regular", "Cascadia Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --color-brand-cyan: #0ff2d1;
+  --color-brand-purple: #818cf8;
+}
+
+@layer base {
+  html {
+    background: #060813;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  html.light {
+    background: #f4f6fa;
+  }
+
+  body {
+    min-height: 100vh;
+    margin: 0;
+    background: transparent;
+    font-weight: 400;
+    font-synthesis-weight: auto;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: rgba(255, 130, 0, 0.25);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar);
+    border-radius: 999px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar) transparent;
+  }
+
+  html.theme-switching,
+  html.theme-switching *,
+  html.theme-switching *::before,
+  html.theme-switching *::after {
+    transition: none !important;
+    transition-delay: 0s !important;
+  }
+
+  /* Hide the injected Next.js development indicator. */
+  nextjs-portal,
+  [data-nextjs-toast],
+  .nextjs-toast,
+  .nextjs-toast-errors-parent,
+  .dev-tools-indicator-menu {
+    display: none !important;
+  }
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.wave-bar {
+  animation: wave 1.2s infinite ease-in-out;
+}
+
+.wave-bar:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.wave-bar:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.wave-bar:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+.wave-bar:nth-child(5) {
+  animation-delay: 0.6s;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.03);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.group\/card:hover .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.16);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.35) !important;
+}
+
+@keyframes drift-1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+  66% {
+    transform: translate(-15px, 25px) scale(0.95);
+  }
+}
+
+@keyframes drift-2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-35px, 40px) scale(0.95);
+  }
+}
+
+@keyframes drift-3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(45px, -30px) scale(1.05);
+  }
+}
+
+.animate-drift-1 {
+  animation: drift-1 25s infinite ease-in-out;
+}
+
+.animate-drift-2 {
+  animation: drift-2 30s infinite ease-in-out;
+}
+
+.animate-drift-3 {
+  animation: drift-3 28s infinite ease-in-out;
+}
+
+
+.backdrop-glass {
+  background-clip: padding-box;
+  backdrop-filter: blur(20px) saturate(145%);
+  -webkit-backdrop-filter: blur(20px) saturate(145%);
+  transform: translateZ(0);
+}
+
+.dark .hot-card-footer {
+  border-color: rgba(27, 34, 60, 0.4);
+  background: rgba(11, 14, 27, 0.4);
+  color: rgb(148, 163, 184);
+}
+
+.light .hot-card-footer {
+  border-color: rgba(226, 232, 240, 0.3);
+  background: rgba(248, 250, 252, 0.3);
+  color: rgb(100, 116, 139);
+}
+
+.dashboard-right-clock-row {
+  display: none;
+}
+
+/* Keep card geometry unchanged while using a continuous-curvature corner on
+   browsers that support CSS corner shapes. */
+.featured-board,
+.dashboard-focus-card,
+.dashboard-mood-card {
+  corner-shape: squircle;
+  background-clip: padding-box;
+}
+
+/* Prioritize the news feed when a desktop viewport is wide and comparatively
+   short while retaining the same title-only intro used on mobile. */
+@media (min-width: 961px) and (max-height: 950px) {
+  .dashboard-header-inner {
+    min-height: 60px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .dashboard-brand-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .dashboard-brand {
+    font-size: 24px;
+  }
+
+  .dashboard-nav {
+    margin-left: 28px;
+  }
+
+  .dashboard-nav-button {
+    min-height: 44px;
+    padding-right: 14px;
+    padding-left: 14px;
+    font-size: 16px;
+  }
+
+  .dashboard-search {
+    height: 44px;
+    max-width: 400px;
+    margin-left: 48px;
+  }
+
+  .dashboard-tool-button {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+  }
+
+  .dashboard-main {
+    padding-top: 16px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    column-gap: 24px;
+  }
+
+  .dashboard-left-column {
+    gap: 12px;
+  }
+
+  .dashboard-right-column {
+    gap: 12px;
+    padding-top: 0;
+  }
+
+  .dashboard-sidebar {
+    gap: 12px;
+  }
+
+  .dashboard-intro {
+    display: flex;
+    height: 72px;
+    min-height: 72px;
+    justify-content: center;
+    padding: 0 4px;
+  }
+
+  .dashboard-intro-title {
+    max-width: none;
+    margin: 0 0 0 7px;
+    font-size: 32px;
+    line-height: 1.15;
+  }
+
+  .dashboard-intro-clock-placement {
+    display: none;
+  }
+
+  .dashboard-right-clock-row {
+    display: flex;
+    height: 68px;
+    min-height: 68px;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .dashboard-intro-clock {
+    height: 40px;
+    min-width: 164px;
+    padding-right: 14px;
+    padding-left: 14px;
+    font-size: 13px;
+  }
+
+  .dashboard-sidebar-clock {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    justify-content: space-between;
+    padding-right: 8px;
+    padding-left: 8px;
+    border-color: transparent;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .dashboard-sidebar-clock .dashboard-clock-separator {
+    display: none;
+  }
+
+  .featured-board-header {
+    min-height: 60px;
+    gap: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .featured-board-logo,
+  .featured-board-logo-image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .featured-board-title {
+    font-size: 21px;
+  }
+
+  .dashboard-platform-switcher {
+    height: 62px;
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+
+  .dashboard-platform-button {
+    min-height: 54px;
+    gap: 10px;
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .dashboard-platform-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .dashboard-platform-status {
+    margin-top: 2px;
+    font-size: 11px;
+  }
+
+  .featured-board-tabs {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+
+  .featured-board-tab {
+    padding: 7px 14px;
+    font-size: 14px;
+  }
+
+  .featured-board-row-title {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .dashboard-focus-card {
+    height: 220px;
+    padding: 12px 16px;
+  }
+
+  .dashboard-focus-card h3,
+  .dashboard-mood-card h3 {
+    font-size: 20px;
+  }
+
+  .dashboard-focus-card p,
+  .dashboard-mood-card p {
+    font-size: 13px;
+  }
+
+  .dashboard-focus-row {
+    min-height: 43px;
+  }
+
+  .dashboard-mood-card {
+    min-height: 148px;
+    padding: 14px 16px;
+  }
+
+  .dashboard-mood-header {
+    align-items: center;
+  }
+
+  .dashboard-mood-options {
+    margin-top: 10px;
+    gap: 4px;
+    padding: 5px;
+  }
+
+  .dashboard-mood-button {
+    height: 62px;
+    gap: 4px;
+  }
+
+  .dashboard-mood-emoji {
+    font-size: 23px;
+  }
+
+  .dashboard-mood-label {
+    font-size: 11px;
+  }
+}

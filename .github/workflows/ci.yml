@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ENABLE_LOCAL_STATS: "false"
+      NEXT_PUBLIC_APP_NAME: HotSearch
+      NEXT_PUBLIC_APP_DESC: 聚合多个公开平台的实时热点
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      NEXT_PUBLIC_COPYRIGHT: HotSearch
+      NEXT_PUBLIC_THEME: light
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.5.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm audit --prod

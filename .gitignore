@@ -1,0 +1,20 @@
+# Dependencies and build output
+/node_modules
+/.next
+/out
+/coverage
+*.tsbuildinfo
+
+# Local environment and runtime data
+.env
+.env.*
+!.env.example
+/.data
+*.jsonl
+*.log
+
+# Local tooling and OS metadata
+.DS_Store
+/.idea
+/.vscode
+

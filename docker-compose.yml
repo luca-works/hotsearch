@@ -1,0 +1,37 @@
+services:
+  hotsearch:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-今日热榜}
+        NEXT_PUBLIC_APP_DESC: ${NEXT_PUBLIC_APP_DESC:-汇聚全网热点，热门尽览无余}
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:18967}
+        NEXT_PUBLIC_COPYRIGHT: ${NEXT_PUBLIC_COPYRIGHT:-今日热榜}
+        NEXT_PUBLIC_THEME: ${NEXT_PUBLIC_THEME:-light}
+    container_name: hot-news
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+      ENABLE_LOCAL_STATS: ${ENABLE_LOCAL_STATS:-false}
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-}
+      VISIT_LOG_PATH: ${VISIT_LOG_PATH:-/data/visits.jsonl}
+      VISIT_GEO_API_URL: ${VISIT_GEO_API_URL:-}
+      VISIT_RETENTION_DAYS: ${VISIT_RETENTION_DAYS:-30}
+      VISIT_STORE_RAW_IP: ${VISIT_STORE_RAW_IP:-false}
+    ports:
+      - "127.0.0.1:${APP_PORT:-18967}:3000"
+    volumes:
+      - hot-news-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3000').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  hot-news-data:
