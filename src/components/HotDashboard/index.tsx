@@ -35,9 +35,8 @@ const formatUpdateTime = (date: Date) => (
 );
 
 const getNextUpdateTime = (result: App.IResponse, previousUpdateTime?: string) => {
-  if (!result.cached) return formatUpdateTime(new Date());
-  if (previousUpdateTime) return previousUpdateTime;
-  return result.cachedAt ? formatUpdateTime(new Date(result.cachedAt)) : previousUpdateTime;
+  if (result.cachedAt) return formatUpdateTime(new Date(result.cachedAt));
+  return previousUpdateTime;
 };
 
 const LAST_PLATFORM_KEY = 'hotsearch-last-platform';
@@ -187,7 +186,10 @@ export default function HotDashboard({ enableVisitStats = false }: { enableVisit
     return () => window.clearInterval(timer);
   }, []);
 
-  const fetchBoardData = useCallback(async (platform: Platform) => {
+  const fetchBoardData = useCallback(async (
+    platform: Platform,
+    { forceRefresh = false }: { forceRefresh?: boolean } = {},
+  ) => {
     setBoards(previous => ({
       ...previous,
       [platform.value]: {
@@ -195,13 +197,17 @@ export default function HotDashboard({ enableVisitStats = false }: { enableVisit
         loading: true,
         error: undefined,
         updateTime: previous[platform.value]?.updateTime,
+        cacheStatus: previous[platform.value]?.cacheStatus,
       },
     }));
 
     try {
-      const response = await fetch(`/api/${platform.value}`);
+      const response = await fetch(
+        `/api/${platform.value}${forceRefresh ? '?refresh=1' : ''}`,
+        forceRefresh ? { cache: 'no-store' } : undefined,
+      );
       const result = await response.json() as App.IResponse;
-      if (!response.ok || !Array.isArray(result.data)) {
+      if (!response.ok || !Array.isArray(result.data) || result.data.length === 0) {
         throw new Error(result.msg || '获取列表数据失败');
       }
 
@@ -211,6 +217,7 @@ export default function HotDashboard({ enableVisitStats = false }: { enableVisit
           data: result.data || [],
           loading: false,
           updateTime: getNextUpdateTime(result, previous[platform.value]?.updateTime),
+          cacheStatus: result.cacheStatus,
         },
       }));
     } catch (error) {
@@ -221,6 +228,7 @@ export default function HotDashboard({ enableVisitStats = false }: { enableVisit
           loading: false,
           error: error instanceof Error ? error.message : '无法加载该榜单，请稍后刷新重试',
           updateTime: previous[platform.value]?.updateTime,
+          cacheStatus: previous[platform.value]?.cacheStatus,
         },
       }));
     }
@@ -259,7 +267,9 @@ export default function HotDashboard({ enableVisitStats = false }: { enableVisit
   const handleRefreshAll = async () => {
     const concurrency = 4;
     for (let index = 0; index < platforms.length; index += concurrency) {
-      await Promise.all(platforms.slice(index, index + concurrency).map(fetchBoardData));
+      await Promise.all(platforms.slice(index, index + concurrency).map(platform => (
+        fetchBoardData(platform, { forceRefresh: true })
+      )));
     }
   };
   const rememberPlatform = (value: string) => {
@@ -373,7 +383,7 @@ export default function HotDashboard({ enableVisitStats = false }: { enableVisit
                     itemLimit={activeCategory === 'all' ? 11 : 12}
                     onHomePlatformsChange={activeCategory === 'all' ? handleHomePlatformsChange : undefined}
                     onPlatformChange={handleBoardPlatformChange}
-                    onRefresh={platform => void fetchBoardData(platform)}
+                    onRefresh={platform => void fetchBoardData(platform, { forceRefresh: true })}
                     platform={activePlatform}
                     platformOptions={categoryPlatforms}
                     searchQuery={searchQuery}

@@ -11,7 +11,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test src/components/HotDashboard/*.test.ts src/lib/hot-sources/adapters/*.test.ts"
+    "test": "node --experimental-strip-types --test src/components/HotDashboard/*.test.ts src/lib/hot-sources/*.test.ts src/lib/hot-sources/adapters/*.test.ts"
   },
   "dependencies": {
     "cheerio": "^1.2.0",

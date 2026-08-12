@@ -247,7 +247,9 @@ export function FeaturedBoard({
                       ? '小红书热榜'
                       : `${platform.label}${platform.tip}`}
                 </span>
-                <span className="shrink-0 text-xs font-black tracking-[0.06em] text-emerald-500">● 实时</span>
+                <span className={`shrink-0 text-xs font-black tracking-[0.06em] ${state.cacheStatus === 'stale' ? 'text-amber-500' : 'text-emerald-500'}`}>
+                  {state.cacheStatus === 'stale' ? '● 缓存' : '● 实时'}
+                </span>
               </span>
               <span className={`mt-1 block text-[14px] font-semibold md:text-[15px] ${dark ? 'text-slate-500' : 'text-slate-500'}`}>
                 {aggregate ? '30+ 平台实时聚合 · 去重呈现' : platform.value === 'weibo' ? '实时热榜 · 每分钟更新' : platform.subtitle}
@@ -279,7 +281,9 @@ export function FeaturedBoard({
           实时热榜
         </span>
         <span className={`text-xs font-semibold ${dark ? 'text-slate-600' : 'text-slate-400'}`}>
-          更新于 {state.updateTime || '同步中'}
+          {state.cacheStatus === 'stale'
+            ? `数据源异常，展示 ${state.updateTime || '较早'} 缓存`
+            : `更新于 ${state.updateTime || '同步中'}`}
         </span>
         <span className={`ml-auto rounded-full px-3 py-1.5 text-[13px] font-bold ${dark ? 'bg-white/[0.04] text-slate-500' : 'bg-slate-100 text-slate-500'}`}>
           {searchQuery.trim() ? `${filteredData.length} 条结果` : `共 ${state.data.length} 条`}

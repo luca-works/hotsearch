@@ -1,13 +1,7 @@
 import { Enum } from 'enum-plus';
 import { Star } from 'lucide-react';
 
-/**
- * @description: 请求状态
- */
-export const RESPONSE = Enum({
-  SUCCESS: { value: 200, label: '请求成功' },
-  ERROR: { value: 500, label: '请求失败' }
-})
+export { RESPONSE } from './response';
 
 /**
  * @description: 主题模式

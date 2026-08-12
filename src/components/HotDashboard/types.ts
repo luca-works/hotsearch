@@ -13,6 +13,7 @@ export type BoardState = {
   loading: boolean;
   error?: string;
   updateTime?: string;
+  cacheStatus?: NonNullable<App.IResponse['cacheStatus']>;
 };
 
 export type LunarAlmanac = {

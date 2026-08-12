@@ -1,30 +1,4 @@
 import CryptoJS from 'crypto-js';
-import dayjs from 'dayjs';
-
-import { RESPONSE } from '@/enums';
-
-/**
- * @description: 请求成功返回处理结果
- */
-export const responseSuccess = (
-  list?: App.HotListItem[],
-  meta: Pick<App.IResponse, 'cached' | 'cachedAt'> = {},
-): App.IResponse => ({
-  msg: RESPONSE.label(RESPONSE.SUCCESS),
-  code: RESPONSE.SUCCESS,
-  data: list || [],
-  timestamp: dayjs().valueOf(),
-  ...meta,
-});
-
-/**
- * @description: 请求失败返回结果
- */
-export const responseError: App.IResponse = {
-  msg: RESPONSE.label(RESPONSE.ERROR),
-  code: RESPONSE.ERROR,
-  timestamp: dayjs().valueOf()
-};
 
 /**
  * @description: Tag 颜色配置

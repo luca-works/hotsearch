@@ -32,6 +32,7 @@ declare namespace App {
     msg: string;
     cached?: boolean;
     cachedAt?: number;
+    cacheStatus?: 'fresh' | 'hit' | 'stale' | 'refreshed';
     data?: HotListItem[];
     timestamp: number;
   };
